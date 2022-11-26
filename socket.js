@@ -1,3 +1,4 @@
+require("dotenv");
 var express             =require("express"),
     app                 =express(),
     cron = require('node-cron'),
@@ -24,7 +25,7 @@ mongoose.connect("mongodb+srv://Socket:xQQPIQ5JY2nA5j8R@cluster0.p8vnb.mongodb.n
 
 app.use(express.json());
 var id=""
-var port=3444 || process.env.PORT
+var port=process.env.PORT || 3444
 app.use(express.static("./public"));
 
 
