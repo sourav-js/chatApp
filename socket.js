@@ -24,6 +24,7 @@ mongoose.connect("mongodb+srv://Socket:xQQPIQ5JY2nA5j8R@cluster0.p8vnb.mongodb.n
 
 app.use(express.json());
 var id=""
+var port=3444 || process.env.PORT
 app.use(express.static("./public"));
 
 
@@ -481,7 +482,7 @@ function islogged(req,res,next){
 		res.redirect("/login")
 	}
 }
-server.listen(3444,function(){
+server.listen(port,function(){
 
 	console.log("server started")
 })
