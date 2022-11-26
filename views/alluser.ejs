@@ -1,0 +1,468 @@
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+</script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+
+<style type="text/css">
+.image:hover{
+  transform:scale(1.2);
+  transition:all .5s ease;
+  
+}
+.point:hover{
+  transform:scale(1.2);
+  transition:all .5s ease;
+}
+
+.point:hover{
+  transform:scale(1.2);
+  transition:all .5s ease;
+}
+[19:39, 09/12/2021] Gargi: footer{
+    background: var(--ternary);
+    padding: 4rem 0;
+}
+
+footer .container{
+    display:flex;
+    color:var(--footer);
+}
+footer .box{
+    flex:1;
+    margin-right:2rem;
+    text-align: center;
+}
+footer .gallery-api img{
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+}
+footer .gallery-api .post-wrap{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+footer .gallery-api .post-wrap > div{
+    width: calc(1/3*100% - (1 - 1/3)*10px);
+    margin-bottom: 10px;
+}
+footer .box ul{
+    list-style-type: none;
+
+}
+footer .box ul li a{
+    color: var(--footer);
+    text-decoration: none;
+    transition: all .4s ease;
+}
+footer .box ul li a:hover{
+    color: var(--light);
+}
+footer .boxh3{
+    border-bottom: 1px solid var(--light);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+}
+[19:40, 09/12/2021] Gargi: @font-face {
+    font-family: "Roboto-Regular";
+    src:url(../fonts/Roboto-Regular.ttf)
+}
+
+@font-face {
+    font-family: "Roboto-medit";
+    src:url(../fonts/Roboto-MediumItalic.ttf)
+}
+
+@font-face {
+    font-family: "Roboto-thit";
+    src:url(../fonts/Roboto-ThinItalic.ttf)
+}
+
+@font-face {
+    font-family: "Roboto-liit";
+    src:url(../fonts/Roboto-LightItalic.ttf)
+}
+
+@font-face {
+    font-family: "Roboto-med";
+    src:url(../fonts/Roboto-Medium.ttf)
+}
+
+:root{
+    --primary:#175c0e;
+    --secodery:#232B38;
+    --ternary:#adadad;
+    --danger:#FE4545;
+    --violate:rgb(47, 42, 68);
+    --pure:#94f76d;
+    --light:#F0F0F0;
+    --heaven:#b5ff8a;
+    --footer:#35373b;
+}
+
+
+ *{
+  margin: 0;
+  padding:0:
+}
+.cell{
+  width: 35%;
+  height: 350px;
+  margin: 10 20px:
+  border-radius:20px;
+}
+
+.cell img{
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+}
+body{
+  
+  background:black;
+}
+.load-inner{
+    width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color:black;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  }
+</style>
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+  <a class="navbar-brand" href="/allusers" ><b></b></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background:maroon">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+     
+    
+      
+ 
+      <li class="nav-item dropdown">
+         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" style="color:black">
+        <%if(currentUser && currentUser.image){%> 
+         <img src="./<%=currentUser.image%>" style="width:40px;border-radius:30px">
+         
+         <%}else{%>
+<img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" style="width:40px;border-radius:30px">
+         <%}%>        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+         <%if(currentUser){%> 
+
+          <a class="dropdown-item" href="/profile/<%=currentUser._id%>"><b><%=currentUser.name%></b></a>
+                                                  
+                    
+                    <a class="dropdown-item" href="/forgot"><b>Change Password</b></a>
+                    <a class="dropdown-item" style="cursor:pointer" data-toggle="modal" data-target="#exampleModal"><b>Change Profile Picture</b></a>
+<div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/logout"><b><i class="fas fa-power-off" style="font-size:20px;color:red;text-align=center"></i></b></a>
+
+          </div>
+          <%}else{%>
+
+        <a class="dropdown-item" href="/login"><b><i class="fas fa-sign-in-alt" style="font-size:30px"></i> </b></a>
+
+                   
+
+
+          
+       
+          
+        <%}%>
+        
+      </li>
+      
+   </ul>
+
+
+
+    <form class="form-inline my-2 my-lg-0" action="/" method="GET" id="forms">
+      
+      <input class="form-control mr-sm-2" id="ppti" type="search" name="find" value="<%=data%>" placeholder="Search By Name" >
+    </form>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><%if(currentUser){%><%=currentUser.name%><%}%></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/profile/<%=currentUser._id%>" method="POST" enctype="multipart/form-data">
+        <input type="file" name="filename">
+        <button  class="btn btn-primary">Save changes</button>
+      </form>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+      
+
+
+
+
+<div class="modal-dialog modal-dialog-scrollable">
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel"><b id="cn"></b></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+               <b>     
+
+        
+        <div style="padding-top:50px;padding-left:20px;padding-bottom:50px">
+  <div class="container">
+  <div class="row">
+    
+    <div class="col-lg-4 col-sm-12 image" ><div style="padding-top:20px;width:300px"><div style="box-shadow:1px 2px  3px grey;" class="img-thumbnail"  align="center">
+   
+ 
+        
+                 <img src="" id="imageval" style="width:200px;height:100%;padding-bottom:50px;cursor:pointer;">
+
+       
+
+        <div style="transform:translateY(50px)">
+        <div style="transform:translateY(-150%);padding-left:2px;">
+         
+       
+         </div>           
+            </div> 
+        </div>
+        </div>
+       
+       </div>
+      </div>
+        </div>
+       
+       </div>
+     
+
+       </div>
+</div>
+                                
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+    <script  src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+
+var socket = io();
+socket.on("online",function(data){
+	
+	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
+})
+
+socket.on("offline",function(data){
+	
+	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
+})
+
+socket.on("disconnect",function(data){
+
+	 socket.emit("disconnects",{id:"<%=currentUser._id%>"})
+})
+</script>
+<title>All-Profiles</title>
+<br>
+
+<table class="table" style="padding-bottom:100px;color:white">
+     <%user.forEach(function(data){%>
+  <%if(data.username!==currentUser.username){%>
+  <thead>
+    <tr>
+
+           <th scope="col">Profile Picure</th>
+
+      <th scope="col">First Name</th>
+      <%if(data.middle){%> 
+       <th scope="col">Middle Name</th>
+      <%}%>
+      <th scope="col">Last Name</th>
+      
+    
+       <th scope="col">email</th>
+       <th scope="col">Chat</th>
+       <th scope="col">Status</th>
+       
+ 
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+         
+   <%if(data.image){%>
+           <td><img src="/<%=data.image%>" id="<%=data._id%>"  data-toggle="modal" data-target="#staticBackdrop" style="width:50px;border-radius:20px"></td>
+ <%}else{%>
+
+           <td><img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"  style="width:50px;border-radius:20px"></td>
+
+ <%}%>
+<script>
+ $("#<%=data._id%>").click(function(){
+
+  
+   $("#imageval").attr("src","/<%=data.image%>")
+   $("#cn").text("<%=data.name%>")
+ })
+      
+</script>
+      <td><%=data.first%></td>
+      <%if(data.middle){%> 
+
+       <td><%=data.middle%></td>
+      <%}%>
+      
+      <td><%=data.last%></td>
+      <td><%=data.username%></td>
+      <td><a href="/chat/<%=data._id%>/<%=currentUser._id%>"><i class="fa-brands fa-rocketchat" style="color:white;font-size:30px"></i></a></td>
+      <%if(data.status=="online"){%>
+       <td><img src="https://miro.medium.com/max/512/1*nZ9VwHTLxAfNCuCjYAkajg.png" style="width:30px"></td>
+     <%}else{%>
+       <td><img src="http://www.clker.com/cliparts/T/G/b/7/r/A/red-dot-md.png" style="width:30px"></td>
+
+     <%}%>
+    </tr>
+  </tbody>
+  <%}%>
+    <%})%>  
+
+    </tr>
+  </tbody>
+</table>
+<%if(currentUser){%>
+ <div style="padding-top:90px"> 
+  <div style="position:fixed;bottom:0;" class="btn btn-block btn-success">
+  <a href="/login"><button class="btn "><i class="fa-solid fa-right-to-bracket" style="font-size:40px;color:white"></i></a>
+  </div>
+  </div>
+ 
+<%}%>
+
+<script type="text/javascript"> 
+
+ 
+
+
+ $(document).ready(function(){
+   $("#ppti").on('keyup',function(e){
+       
+    if(e.key!=="Backspace" && e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
+     if($("#ppti").val().length>0){
+      console.log(e.key)
+      $("#forms").submit()
+       
+      }
+     }
+   })
+
+  })
+    $(document).ready(function(){
+   $("#pptis").on('keyup',function(e){
+       
+    if(e.key!=="Backspace" && e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
+     if($("#pptis").val().length>0){
+      console.log(e.key)
+      $("#formss").submit()
+       
+      }
+     }
+   })
+    })
+$(document).ready(function(){
+   $("#pptia").on('keyup',function(e){
+       
+    if(e.key!=="Backspace" && e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
+     if($("#pptia").val().length>0){
+      console.log(e.key)
+      $("#forma").submit()
+       
+      }
+     }
+   })
+    })
+  $(document).ready(function(){
+   $("#pptib").on('keyup',function(e){
+       
+    if(e.key!=="Backspace" && e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
+     if($("#pptib").val().length>0){
+      console.log(e.key)
+      $("#formb").submit()
+       
+      }
+     }
+   })
+    })  
+
+$(document).ready(function(){
+   $("#pptic").on('keyup',function(e){
+       
+    if(e.key!=="Backspace" && e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
+     if($("#pptic").val().length>0){
+      console.log(e.key)
+      $("#formc").submit()
+       
+      }
+     }
+   })
+    })  
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>

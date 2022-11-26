@@ -1,0 +1,100 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+</script>
+<input type="text" id="text">
+<button id="oks">send</button>
+
+<div id="refreshs"> 
+<%if(user && user.chats.length>0){%>
+ <%user.chats.forEach(function(info){%>
+ <%if(info.from==currentUser._id && info.to==uid){%>
+  <p style="color:blue">You</p>
+  <p style="color:blue"><%=info.text%></p>
+  <br>
+ <%}else if(info.to==currentUser._id && info.from==uid){%>
+   
+   <p style="color:red"><%=info.name%></p>
+  <p style="color:red"><%=info.text%></p>
+<br>
+ <%}%>
+ 
+  <%})%>
+ <%}%>
+</div>
+<script  src="/socket.io/socket.io.js"></script>
+
+
+
+
+<script type="text/javascript">
+
+var socket = io();
+socket.on("online",function(data){
+	
+	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
+})
+
+socket.on("off",function(data){
+	
+	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
+})
+socket.on("message",function(data){
+	 
+	 console.log("connected")
+
+})
+  
+
+function refresh(){
+	             $("#refreshs").load(" #refreshs");
+	             $("#refreshs").load(" #refreshs");
+	             $("#refreshs").load(" #refreshs");
+	             $("#refreshs").load(" #refreshs");
+
+
+} 
+function sending(){
+	
+
+}
+
+socket.on("texts",function(data){
+	
+	 	             $("#refreshs").load(" #refreshs");
+	 	             $("#refreshs").load(" #refreshs");
+	 	             $("#refreshs").load(" #refreshs");
+	 	             $("#refreshs").load(" #refreshs");
+
+})
+
+
+  $("#oks").click(function(){
+
+
+
+
+
+
+$.ajax({
+        url: "/chatCreate",
+        method: 'POST',
+       data:{
+        
+        uid:"<%=uid%>",
+        id:"<%=id%>",
+        text:$("#text").val()
+
+             }        
+
+    });
+
+$("#text").val("")
+
+     	  socket.emit("message",{text:$("#name").val()})
+
+  setTimeout(refresh,1000)
+
+  })  
+
+
+
+</script>
