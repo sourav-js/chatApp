@@ -1,10 +1,13 @@
 
-
-
+{
+"name": "chatApp",
+  "version": "1.0.0",
+  "description": "\"service based app\"",
+  "main": "socket.js",
 "scripts": {
               "start": "node socket.js"
            },
-{
+
   "dependencies": {
     "body-parser": "^1.20.1",
     "connect-flash": "^0.1.1",
