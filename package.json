@@ -5,6 +5,7 @@
   "description": "\"service based app\"",
   "main": "socket.js",
 "scripts": {
+	 "test": "echo \"Error: no test specified\" && exit 1",
               "start": "node socket.js"
            },
 
