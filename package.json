@@ -8,6 +8,15 @@
               "start": "node socket.js"
            },
 
+ "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourav-js/chatApp.git"
+  },          
+"author": "sourav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sourav-js/chatApp/issues"
+  },
   "dependencies": {
     "body-parser": "^1.20.1",
     "connect-flash": "^0.1.1",
