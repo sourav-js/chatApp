@@ -207,7 +207,7 @@ socket.userid=data.id
          	 })
          })
 
-   
+   socket.broadcast.emit("someOn",{data:""})
 
 })
 
@@ -227,10 +227,12 @@ socket.userid=data.id
                              user.findById(socket.userid,function(err,userss){
 
          	 userss.updateOne({status:"off"},function(err,info){
-                 
+               userss.which="" 
+               userss.save()                
 
          	 })
          }) 
+         socket.broadcast.emit("someOff",{data:""})
                   	 	 	
    
    

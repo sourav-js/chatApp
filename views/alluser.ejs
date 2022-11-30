@@ -297,34 +297,12 @@ body{
 
     <script  src="/socket.io/socket.io.js"></script>
 
-<script type="text/javascript">
 
-var socket = io();
-socket.on("online",function(data){
-	
-	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
-
-})
-
-socket.on("which",function(data){
-	
-	 socket.emit("whichclean",{id:"<%=currentUser._id%>"})
-})
-
-socket.on("offline",function(data){
-	
-	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
-})
-
-socket.on("disconnect",function(data){
-
-	 socket.emit("disconnects",{id:"<%=currentUser._id%>"})
-})
-</script>
 <title>All-Profiles</title>
 <br>
 
 <table class="table" style="padding-bottom:100px;color:white">
+    <div id="refreshs"> 
      <%user.forEach(function(data){%>
   <%if(data.username!==currentUser.username){%>
   <thead>
@@ -377,11 +355,13 @@ socket.on("disconnect",function(data){
       <td><%=data.username%></td>
       <td><a href="/chat/<%=data._id%>/<%=currentUser._id%>"><i class="fa-brands fa-rocketchat" style="color:white;font-size:30px"></i></a></td>
       <%if(data.status=="online"){%>
+       
        <td><img src="https://miro.medium.com/max/512/1*nZ9VwHTLxAfNCuCjYAkajg.png" style="width:30px"></td>
      <%}else{%>
        <td><img src="http://www.clker.com/cliparts/T/G/b/7/r/A/red-dot-md.png" style="width:30px"></td>
 
      <%}%>
+     </span>
     </tr>
   </tbody>
   <%}%>
@@ -389,6 +369,7 @@ socket.on("disconnect",function(data){
 
     </tr>
   </tbody>
+  </div>
 </table>
 <%if(currentUser){%>
  <div style="padding-top:90px"> 
@@ -398,6 +379,50 @@ socket.on("disconnect",function(data){
   </div>
  
 <%}%>
+
+
+<script type="text/javascript">
+
+var socket = io();
+socket.on("online",function(data){
+	
+	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
+
+})
+socket.on("someOff",function(data){
+	
+	 	             $("#refreshs").load(" #refreshs");
+
+	 	             
+
+	 	            
+
+})
+socket.on("someOn",function(data){
+	
+	 	             $("#refreshs").load(" #refreshs");
+
+	 	             
+
+	 	            
+
+})
+socket.on("which",function(data){
+	
+	 socket.emit("whichclean",{id:"<%=currentUser._id%>"})
+})
+
+socket.on("offline",function(data){
+	
+	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
+})
+
+socket.on("disconnect",function(data){
+
+	 socket.emit("disconnects",{id:"<%=currentUser._id%>"})
+})
+</script>
+
 
 <script type="text/javascript"> 
 

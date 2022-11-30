@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head>
 	<meta charset="UTF-8">
-	<title>Whatsapp UI</title>
+	<title><%=victim.name%></title>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
 <script type="text/javascript" class="scri" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
 </script>
@@ -304,6 +304,24 @@ socket.on("done",function(data){
 	             
 
 })
+socket.on("someOff",function(data){
+	
+	 	             $("#refreshs").load(" #refreshs");
+
+	 	             
+
+	 	            
+
+})
+socket.on("someOn",function(data){
+	
+	 	             $("#refreshs").load(" #refreshs");
+
+	 	             
+
+	 	            
+
+})
 socket.on("off",function(data){
 	
 	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
@@ -321,7 +339,6 @@ function refresh(){
 	             $("#refreshs").load(" #refreshs");
 
 	             $("#refreshs").load(" #refreshs");
-	            scrip.setAttribute("src","https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js")
 
 
 
@@ -340,13 +357,20 @@ socket.on("texts",function(data){
 	 	             $("#refreshs").load(" #refreshs");
 	             $("#refreshs").load(" #refreshs");
 	             $("#refreshs").load(" #refreshs");
-	            scrip.setAttribute("src","https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js")
 
 
 	 	            
 
 })
+socket.on("someOff",function(data){
+	
+	 	             $("#refreshs").load(" #refreshs");
 
+	 	             
+
+	 	            
+
+})
 
   
    $("#text").on('keyup',function(e){
