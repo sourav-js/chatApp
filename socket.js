@@ -58,6 +58,7 @@ app.use(function(req,res,next){
  	name:String,
  	from:String,
  	to:String,
+ 	seen:String,
  	image:String,
  	date:{type:Date,default:Date.now}
  })
@@ -77,6 +78,7 @@ var tokenSchema=new mongoose.Schema({
     username:String,
     password:String,
     last:String,
+    which:String,
     status:String,
     image:String,
     chats:[{
@@ -136,15 +138,63 @@ app.get("/testing",function(req,res){
   console.log("hhhhhhhhhhhhhhhhhhhhhhh")
 })
 
+function aboutm(ids,uids){
 
+    user.findById(ids).populate("chats").exec(function(err,alluser){
+
+    user.findOne({_id:uids},function(err,another){
+    	if(alluser.which!==uids || another.which!==ids){
+        	 for (var i=0;i<alluser.chats.length;i++){
+               console.log("loop")
+
+    	 	if(alluser.chats[i].from==uids && alluser.chats[i].to==ids){
+
+    	 		 chat.findById(alluser.chats[i]._id,function(err,info){
+
+    	 		 	 info.updateOne({seen:"yes"},function(err,infos){
+
+    	 		 	 })
+    	 		 })
+    	 	}
+    	 }
+      alluser.updateOne({which:uids},function(err,info){
+
+
+      })
+  }
+    })
+})
+}
 
 io.on("connection",function(socket){
  console.log("hitted")
+function dones(){
+ socket.broadcast.emit("done",{data:""})  
 
+  
+
+}
 socket.emit("online",{data:""})  
+socket.emit("seen",{data:""})  
+socket.emit("which",{data:""})  
  
+ socket.on("whichclean",function(data){
+   
+   user.findById(data.id,function(err,alluser){
+   alluser.updateOne({which:""},function(err,info){
+
+   })
+})
+ })
+ socket.on("seenMessage",function(data){
+   console.log("now hitting here")
+
+aboutm(data.id,data.uid)
+
+  setTimeout(dones,1000)
 
 
+})
  socket.on("onlineStatus",function(data){
  
 socket.userid=data.id
@@ -152,7 +202,7 @@ socket.userid=data.id
 
          	 users.updateOne({status:"online"},function(err,info){
                  
-            
+                     
                   
          	 })
          })
@@ -375,7 +425,15 @@ app.post("/chatCreate",islogged,function(req,res){
    user.findById(req.body.id).populate("chats").exec(function(err,userone){
 
    	 user.findOne({_id:req.body.uid}).populate("chats").exec(function(err,usertwo){
+      
+       if(userone.which==usertwo._id && usertwo.which==userone._id){
 
+          var seen="yes"
+       }
+       else{
+
+       	  var seen="no"
+       }
    if(userone.image){
 
    	 var image=userone.image
@@ -384,11 +442,25 @@ else{
 
 	var image=""
 }
-   	 	 chat.create({text:req.body.text,from:req.body.id,to:req.body.uid,name:userone.first,image:image,date:Date.now()},function(err,texts){
+   	 	 chat.create({text:req.body.text,from:req.body.id,to:req.body.uid,name:userone.first,image:image,date:Date.now(),seen:seen},function(err,texts){
 
-   	 	 	 userone.chats.push(texts)
-   	 	 	 usertwo.chats.push(texts)
-   	 	 	 userone.save()
+             var i=userone.chats.length-1
+             var j=usertwo.chats.length-1
+             userone.chats.push(0)
+             while (i!==-1){
+                 userone.chats[i+1]=userone.chats[i]
+                 i=i-1
+
+             }
+             userone.chats[i+1]=texts
+             userone.save()
+   	 	 	 usertwo.chats.push(0)
+             while (j!==-1){
+                 usertwo.chats[j+1]=usertwo.chats[j]
+                 j=j-1
+
+             }
+             usertwo.chats[j+1]=texts
    	 	 	 usertwo.save()
    	 	 })
    	 })
@@ -448,8 +520,11 @@ app.post("/setPassword",islogged,function(req,res){
 
 app.get("/chat/:uid/:id",islogged,function(req,res){
    
+
  user.findById(req.user._id).populate("chats").exec(function(err,users){   
- user.findOne({_id:req.params.uid}).populate("chats").exec(function(err,victim){   
+ user.findOne({_id:req.params.uid}).populate("chats").exec(function(err,another){   
+ 
+
  // var flag=true
  // users.chats.forEach(function(data){
 
@@ -467,7 +542,7 @@ app.get("/chat/:uid/:id",islogged,function(req,res){
  // 	 var mark="no"
  // }
 
-   res.render("chat.ejs",{uid:req.params.uid,id:req.params.id,user:users,victim:victim})
+   res.render("chat.ejs",{uid:req.params.uid,id:req.params.id,user:users,victim:another})
 })
 })
 })

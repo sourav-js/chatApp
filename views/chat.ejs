@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
 <head>
 	<meta charset="UTF-8">
 	<title>Whatsapp UI</title>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+<script type="text/javascript" class="scri" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
 </script>
+		<script type="text/javascript" src="/socket.io/socket.io.js"> </script>
+
 <style type="text/css">
 	*{
 	padding: 0;
@@ -74,10 +76,12 @@
 
 .chat-box {
 	background: url('../img/bg.jpeg');
-	background-attachment: fixed;
+	background-attachment:all ;
 	padding-left: 20px;
-	overflow-y: scroll;
-	flex: 1;
+	overflow-y: auto;
+	display:flex;
+flex-direction: column-reverse; 
+
 }
 .chat-box .img_chat {
 	width: 280px;
@@ -198,15 +202,15 @@
 </head>
 <body>
 
-	
-	<div id="refreshs"> 
+	<div > 
+
 
 	<div class="container">
-		<div class="chat">
+		<div class="chat" id="refreshs">
 			<div class="chat-header">
 				<div class="profile">
 					<div class="left">
-						<%if(victim.image){%>
+						<%if(victim.image && victim.image!==""){%>
 						 <img src="/<%=victim.image%>" class="pp">
 						<%}else{%>
 						 <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="pp">
@@ -235,7 +239,7 @@
                             <%=info.text%>
 						</p>
 						<div class="check">
-							<span><%=info.date.toLocaleString([], { hour: '2-digit', minute: '2-digit' })%></span>
+							<span><%=info.date.toLocaleString([], { hour: '2-digit', minute: '2-digit' })%> <%if(info.seen=="no"){%><span><i class="fas fa-check-double" style="color:grey"></i></span><%}else{%><i class="fas fa-check-double" style="color:blue"></i><%}%>
 						</div>
 					</div>
 				</div>
@@ -257,28 +261,32 @@
              <%})%>
              <%}%>  
 	             
+	
 	</div>
 </div>
+	
+		
 			<div class="chat-footer">
 				<textarea placeholder="Type a message" id="text"></textarea>
 				<div class="icons">
 					
 				</div>
-            <span class="hid btns"><img src="https://cdn-icons-png.flaticon.com/512/60/60525.png" class="mic" id="oks"></span>
+            <span class="btns hid" id="oks"><button class="mic" style="border-radius:30px;border-style:none;cursor:pointer;background-color:green"><i class="fas fa-paper-plane" style="color:white;font-size:20px"></i></button></span>
+			
 			</div>
-		</div>
-	</div>
+</div>		
+	
 
-	<script  src="/socket.io/socket.io.js"></script>
+	
 
 
 
 
 <script type="text/javascript">
 let messageArea = document.querySelector('.chat-box')
+let scrip = document.querySelector('.scri')
 
 function scrollToBottom() {
-    messageArea.scrollTop = messageArea.scrollHeight
 }
 
 var socket = io();
@@ -287,6 +295,15 @@ socket.on("online",function(data){
 	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
 })
 
+socket.on("seen",function(data){
+	
+	 socket.emit("seenMessage",{id:"<%=currentUser._id%>",uid:"<%=uid%>"})
+})
+socket.on("done",function(data){
+	             $("#refreshs").load(" #refreshs");
+	             
+
+})
 socket.on("off",function(data){
 	
 	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
@@ -299,49 +316,55 @@ socket.on("message",function(data){
   
 
 function refresh(){
+
+
 	             $("#refreshs").load(" #refreshs");
+
 	             $("#refreshs").load(" #refreshs");
-	             $("#refreshs").load(" #refreshs");
-	             $("#refreshs").load(" #refreshs");
-	             
+	            scrip.setAttribute("src","https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js")
+
+
 
 
 } 
 function sending(){
 	
+	            	             	                    $(".chat-box").scrollTop =  $(".chat-box").scrollHeight
 
 }
 
 socket.on("texts",function(data){
 	
 	 	             $("#refreshs").load(" #refreshs");
+
 	 	             $("#refreshs").load(" #refreshs");
-	             scrollToBottom()
 	             $("#refreshs").load(" #refreshs");
 	             $("#refreshs").load(" #refreshs");
+	            scrip.setAttribute("src","https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js")
+
+
 	 	            
 
 })
 
 
   
-$(document).ready(function(){
    $("#text").on('keyup',function(e){
        
     if(e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
      if($("#text").val().length>0){
-         
-          $(".btns").removeClass("hid")
-       
+                  $(".btns").removeClass("hid")
+ 
+      
       }
       else{
-          $(".btns").addClass("hid")
 
+                  $(".btns").addClass("hid")
 
       }
      }
    })
-    })
+    
 
   $("#oks").click(function(){
 
@@ -349,7 +372,6 @@ $(document).ready(function(){
 
 
 
-scrollToBottom()
 $.ajax({
         url: "/chatCreate",
         method: 'POST',
@@ -366,12 +388,15 @@ $.ajax({
 
 
 $("#text").val("")
-	 	         $("#refreshs").load(" #refreshs");
+          $(".btns").addClass("hid")
+
 
 
      	  socket.emit("message",{text:""})
 
   setTimeout(refresh,1000)
+
+
 
   })  
 
@@ -379,5 +404,7 @@ $("#text").val("")
 
 
 </script>
+
 </body>
+
 </html>

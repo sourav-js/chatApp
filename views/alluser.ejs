@@ -146,7 +146,7 @@ body{
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
   <a class="navbar-brand" href="/" >Chat<b></b></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background:maroon">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background:black">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -303,6 +303,12 @@ var socket = io();
 socket.on("online",function(data){
 	
 	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
+
+})
+
+socket.on("which",function(data){
+	
+	 socket.emit("whichclean",{id:"<%=currentUser._id%>"})
 })
 
 socket.on("offline",function(data){
