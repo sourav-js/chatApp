@@ -81,6 +81,7 @@ var tokenSchema=new mongoose.Schema({
     which:String,
     status:String,
     image:String,
+    type:String,
     chats:[{
             type: mongoose.Schema.Types.ObjectId,
             ref:"chat"
@@ -143,7 +144,6 @@ function aboutm(ids,uids){
     user.findById(ids).populate("chats").exec(function(err,alluser){
 
     user.findOne({_id:uids},function(err,another){
-    	if(alluser.which!==uids || another.which!==ids){
         	 for (var i=0;i<alluser.chats.length;i++){
                console.log("loop")
 
@@ -156,7 +156,7 @@ function aboutm(ids,uids){
     	 		 	 })
     	 		 })
     	 	}
-    	 }
+    	 
       alluser.updateOne({which:uids},function(err,info){
 
 
@@ -218,8 +218,20 @@ socket.userid=data.id
    	 socket.broadcast.emit("texts",{text:data.text})
    })
  
-   
+ socket.on("typingOn",function(data){
+ 
+ 
+   	 socket.broadcast.emit("tOn",{text:""})
+     
+  
+ })    
+socket.on("typingOff",function(data){
 
+ 
+   	 socket.broadcast.emit("tOff",{text:""})
+    
+  
+   }) 
     socket.on("disconnect",function(data){
     // socket.emit("offline",{data:""})  
 
