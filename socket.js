@@ -145,7 +145,6 @@ function aboutm(ids,uids){
 
     user.findOne({_id:uids},function(err,another){
         	 for (var i=0;i<alluser.chats.length;i++){
-               console.log("loop")
 
     	 	if(alluser.chats[i].from==uids && alluser.chats[i].to==ids){
 
@@ -156,12 +155,12 @@ function aboutm(ids,uids){
     	 		 	 })
     	 		 })
     	 	}
-    	 
-      alluser.updateOne({which:uids},function(err,info){
-
+    	 }
+      alluser.updateOne({which:another._id},function(err,info){
+              
 
       })
-  }
+  
     })
 })
 }
@@ -212,25 +211,28 @@ socket.userid=data.id
 })
 
 
-   socket.on("message",function(data){
+   // socket.on("message",function(data){
 
 
-   	 socket.broadcast.emit("texts",{text:data.text})
-   })
+   // 	 socket.broadcast.emit("texts",{text:data.text})
+   // })
  
  socket.on("typingOn",function(data){
- 
- 
+  user.findById(data.two,function(err,victim){
+    
+    if(victim.which==data.userid){ 
    	 socket.broadcast.emit("tOn",{text:""})
-     
-  
+     console.log(data.two)
+     }
+   })
  })    
 socket.on("typingOff",function(data){
-
- 
+user.findById(data.two,function(err,victim){
+   if(victim.which==data.userid){
    	 socket.broadcast.emit("tOff",{text:""})
     
-  
+  }
+   })
    }) 
     socket.on("disconnect",function(data){
     // socket.emit("offline",{data:""})  

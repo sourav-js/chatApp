@@ -412,15 +412,9 @@ socket.on("which",function(data){
 	 socket.emit("whichclean",{id:"<%=currentUser._id%>"})
 })
 
-socket.on("offline",function(data){
-	
-	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
-})
 
-socket.on("disconnect",function(data){
 
-	 socket.emit("disconnects",{id:"<%=currentUser._id%>"})
-})
+
 </script>
 
 

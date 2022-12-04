@@ -222,9 +222,11 @@ flex-direction: column-reverse;
 						<%}else{%>
              <span><img src="http://www.clker.com/cliparts/T/G/b/7/r/A/red-dot-md.png" style="width:10px"></span>
 						<%}%>
-				 <%if(currentUser.which==victim._id && victim.which==currentUser._id){%>	
+										<%if(victim.which==currentUser._id){%>
+                     	
 					<span style="font-size:10px;transform:translateX(15px);" class="ty"></span>
-				 <%}%>	
+				 <%}%>
+
 					</div>
 					<div class="right">
 						
@@ -325,10 +327,7 @@ socket.on("someOn",function(data){
 	 	            
 
 })
-socket.on("off",function(data){
-	
-	 socket.emit("offStatus",{id:"<%=currentUser._id%>"})
-})
+
 socket.on("message",function(data){
 	 
 	 console.log("connected")
@@ -381,13 +380,15 @@ socket.on("someOff",function(data){
     if(e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
      if($("#text").val().length>0){
                   $(".btns").removeClass("hid")
-                          socket.emit("typingOff",{userid:"<%=currentUser._id%>"})                  
 
+                          socket.emit("typingOff",{userid:"<%=currentUser._id%>",one:"<%=currentUser.which%>",two:"<%=victim._id%>",three:"<%=victim.which%>",four:"<%=currentUser._id%>"})                  
+                  
          
       }
       else{
 
                   $(".btns").addClass("hid")
+
 
       }
      }
@@ -396,9 +397,8 @@ socket.on("someOff",function(data){
        
     if(e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
      if($("#text").val().length>0){
-       
-        socket.emit("typingOn",{userid:"<%=currentUser._id%>"})                  
-      
+
+         socket.emit("typingOn",{userid:"<%=currentUser._id%>",one:"<%=currentUser.which%>",two:"<%=victim._id%>",three:"<%=victim.which%>",four:"<%=currentUser._id%>"})                  
       }
       
      }
