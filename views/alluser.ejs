@@ -14,6 +14,7 @@
 
 
 <style type="text/css">
+
 .image:hover{
   transform:scale(1.2);
   transition:all .5s ease;
@@ -144,7 +145,8 @@ body{
   align-items: center;
   }
 </style>
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-success">
   <a class="navbar-brand" href="/" >Chat<b></b></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" style="background:black">
     <span class="navbar-toggler-icon"></span>
@@ -189,7 +191,16 @@ body{
         <%}%>
         
       </li>
+
+ <li class="nav-item">
+         <i class="fas fa-bell nav-link" style="font-size:30px;color:white;cursor:pointer" type="button" data-toggle="modal" data-target="#exampleModals" data-whatever="@mdo"> <%if(currentUser){%>
+          <%if(usernoti.notis.length>0){%>
+              <span style="font-size:15px;border-radius:30px;color:red;"><b><%=usernoti.notis.length%></b></span>
+<%}%>               
+        <%}%></i>
+         
       
+      </li>      
    </ul>
 
 
@@ -202,6 +213,99 @@ body{
 </nav>
 
 
+    <div class="modal-dialog modal-dialog-scrollable">
+
+<div class="modal fade" id="exampleModals" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Notifications</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+<%if(currentUser){%>        
+ <%if(usernoti.notis.length>0){%> 
+ 
+ <table class="table">
+  <thead>
+   
+  </thead>
+  <tbody>
+
+ <%usernoti.notis.forEach(function(pup){%>
+     
+    <tr style="">
+      
+     
+ 
+         
+       
+      
+
+      
+       
+      <%if(pup.image){%>
+                  
+
+      <th scope="row"> 
+                        
+                       <a style="cursor:pointer"  href=""  class="subs"><img src="/<%=pup.image%>" style="width:45px;border-radius:30px"></a>
+
+        
+         </th>
+      <%}else{%>
+        
+         <th scope="row"> 
+                        
+                      
+                <a  class="sub"  style="border-radius:30px"><i class="fas fa-user"></i></a>
+
+        
+         </th>
+
+      <%}%>
+      
+     <td><b style="font-size:14px;word-break:break-word"><%=pup.name%> Have a Message For You!</b></td></a>
+
+       <td><a href="/chatNoti/<%=pup.uid%>/<%=currentUser._id%>/<%=pup._id%>"><b style="color:black;font-size:10px"><i class="fab fa-rocketchat"></i></b></a></td>
+ 
+        
+
+      
+
+       <td><b style="color:grey;font-size:10px"><%=pup.date.toLocaleString("en-UN")%></b></td>
+
+    
+
+    </tr>
+
+
+ <%})%>
+ 
+  </tbody>
+ </table>
+
+<%}else{%>
+
+        <div align="center"><b><em style="color:black;font-size:20px;">NO Notifications Yet!</em></b></div>
+
+
+ <%}%>   
+<%}else{%>
+        <div align="center"><b><em style="color:black;font-size:20px;">You Have Logged Out!</em></b></div>
+
+<%}%>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 
 
 
@@ -290,7 +394,7 @@ body{
 
 
 
-
+</div>
 
 
 
@@ -389,15 +493,29 @@ socket.on("online",function(data){
 	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
 
 })
+socket.on("notification",function(data){
+	
+		 	             
+		 	             $("#new").load(" #new");
+		 	             $("#new").load(" #new");
+
+
+})
+socket.on("newNotification",function(data){
+	
+		 	             
+		 	             $("#new").load(" #new");
+		 	             $("#new").load(" #new");
+
+})
+
 socket.on("someOff",function(data){
 	
 	 	             $("#refreshs").load(" #refreshs");
 
 	 	             
-
-	 	            
-
 })
+
 socket.on("someOn",function(data){
 	
 	 	             $("#refreshs").load(" #refreshs");

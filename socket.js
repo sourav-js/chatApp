@@ -64,6 +64,16 @@ app.use(function(req,res,next){
  })
  var chat=mongoose.model("chat",chatSchema)
 
+var notiSchema=new mongoose.Schema({
+
+ 	image:String,
+ 	name:String,
+ 	uid:String,
+ 	seen:String,
+ 	date:{type:Date,default:Date.now}
+ })
+ var noti=mongoose.model("noti",notiSchema)
+
 var tokenSchema=new mongoose.Schema({
 
  	code:Number,
@@ -86,8 +96,12 @@ var tokenSchema=new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref:"chat"
  
+    }],
+   notis:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"noti"
+ 
     }]
-
     
 })
 userSchema.plugin(passportlocalmongoose)
@@ -139,6 +153,8 @@ app.get("/testing",function(req,res){
   console.log("hhhhhhhhhhhhhhhhhhhhhhh")
 })
 
+
+
 function aboutm(ids,uids){
 
     user.findById(ids).populate("chats").exec(function(err,alluser){
@@ -176,6 +192,8 @@ function dones(){
 socket.emit("online",{data:""})  
 socket.emit("seen",{data:""})  
 socket.emit("which",{data:""})  
+socket.emit("textEvent",{data:""})  
+socket.emit("newNotification",{data:""})  
  
  socket.on("whichclean",function(data){
    
@@ -210,12 +228,79 @@ socket.userid=data.id
 
 })
 
+function sendn(){
+ socket.broadcast.emit("notification",{data:""})  
 
-   // socket.on("message",function(data){
+  
+
+}
+
+   socket.on("noti",function(data){
+    
+      user.findById(data.id).populate("chats").exec(function(err,userone){
+
+   	 user.findOne({_id:data.uid}).populate("chats").populate("notis").exec(function(err,usertwo){
+console.log("for notification")
+        
+
+          if(usertwo.which!==data.id){ 
+   	     
+   	     if(userone.image){
+
+   	     	 var image=userone.image
+   	     } 		
+   	     else{
+
+           var image=""
+          }
+       
+           var flag=true
+          for(var i=0;i<usertwo.notis.length;i++){
+
+          	if(usertwo.notis[i].uid==data.id){
+
+          		flag=false
+          		break
+          	}
+          }
+          if(flag==true){
+                    noti.create({uid:userone._id,image:image,name:userone.name,seen:"no",date:Date.now()},function(err,nots){
+ 
+            if(usertwo.notis.length>0){
+
+            	var p=usertwo.notis.length-1
+            	usertwo.notis.push(0)
+                while (p!==-1){
+
+                	usertwo.notis[p+1]=usertwo.notis[p]
+                	p=p-1
+
+                }
+               usertwo.notis[p+1]=nots 
+
+             }
+             else{
+
+             	usertwo.notis.push(nots)
+             }
+           usertwo.save()
+        
+
+           setTimeout(sendn,1000)
+         })
+         }
+         
+        
+    }
+})
+  })
+   })
+
+   socket.on("message",function(data){
 
 
-   // 	 socket.broadcast.emit("texts",{text:data.text})
-   // })
+   	 socket.broadcast.emit("texts",{text:data.text})
+   })
  
  socket.on("typingOn",function(data){
   user.findById(data.two,function(err,victim){
@@ -226,6 +311,7 @@ socket.userid=data.id
      }
    })
  })    
+
 socket.on("typingOff",function(data){
 user.findById(data.two,function(err,victim){
    if(victim.which==data.userid){
@@ -270,17 +356,18 @@ app.post("/login",passport.authenticate("local",{
 successRedirect:"/", 
 failureRedirect:"/login"
 }),function(req,res){
-
+   
 });
 
 app.get("/",islogged,function(req,res){
  
- if(req.query.find){
+ user.findById(req.user._id).populate("notis").exec(function(err,usersnoti){
+  if(req.query.find){
   
 		     	 user.find({first:{$regex:req.query.find,$options:"$i"}},function(err,users){
 
 		     	 	  if(users.length>0){  
-		     	 	    res.render("alluser.ejs",{user:users,data:req.query.find})
+		     	 	    res.render("alluser.ejs",{user:users,data:req.query.find,usernoti:usersnoti})
                          }
                          else{
                          	    	                           res.send("<h1 align=center style=padding-top:200px>No User Found</h1>")
@@ -304,14 +391,14 @@ else{
 
  
     user.find({},function(err,users){
-     res.render("alluser.ejs",{user:users,data:""})
+     res.render("alluser.ejs",{user:users,usernoti:usersnoti,data:""})
 
 
  })
 
 }
 })
-
+})
 app.get("/session",function(req,res){
 
 	res.send(req.session)
@@ -438,11 +525,12 @@ app.post("/profile/:id",islogged,function(req,res){
 })
 app.post("/chatCreate",islogged,function(req,res){
    
-   user.findById(req.body.id).populate("chats").exec(function(err,userone){
+   user.findById(req.body.id).populate("chats").exec(function(err,userones){
 
-   	 user.findOne({_id:req.body.uid}).populate("chats").exec(function(err,usertwo){
-      
-       if(userone.which==usertwo._id && usertwo.which==userone._id){
+   	 user.findOne({_id:req.body.uid}).populate("chats").populate("notis").exec(function(err,usertwos){
+     
+
+       if(userones.which==usertwos._id && usertwos.which==userones._id){
 
           var seen="yes"
        }
@@ -450,34 +538,35 @@ app.post("/chatCreate",islogged,function(req,res){
 
        	  var seen="no"
        }
-   if(userone.image){
+   if(userones.image){
 
-   	 var image=userone.image
+   	 var image=userones.image
    }
 else{
 
 	var image=""
 }
-   	 	 chat.create({text:req.body.text,from:req.body.id,to:req.body.uid,name:userone.first,image:image,date:Date.now(),seen:seen},function(err,texts){
 
-             var i=userone.chats.length-1
-             var j=usertwo.chats.length-1
-             userone.chats.push(0)
+   	 	 chat.create({text:req.body.text,from:req.body.id,to:req.body.uid,name:userones.first,image:image,date:Date.now(),seen:seen},function(err,texts){
+
+             var i=userones.chats.length-1
+             var j=usertwos.chats.length-1
+             userones.chats.push(0)
              while (i!==-1){
-                 userone.chats[i+1]=userone.chats[i]
+                 userones.chats[i+1]=userones.chats[i]
                  i=i-1
 
              }
-             userone.chats[i+1]=texts
-             userone.save()
-   	 	 	 usertwo.chats.push(0)
+             userones.chats[i+1]=texts
+             userones.save()
+   	 	 	 usertwos.chats.push(0)
              while (j!==-1){
-                 usertwo.chats[j+1]=usertwo.chats[j]
+                 usertwos.chats[j+1]=usertwos.chats[j]
                  j=j-1
 
              }
-             usertwo.chats[j+1]=texts
-   	 	 	 usertwo.save()
+             usertwos.chats[j+1]=texts
+   	 	 	 usertwos.save()
    	 	 })
    	 })
    })  
@@ -534,10 +623,44 @@ app.post("/setPassword",islogged,function(req,res){
     })
 })
 
+app.get("/chatNoti/:uid/:id/:nid",islogged,function(req,res){
+
+  noti.findByIdAndDelete(req.params.nid,function(err,info){
+
+  	 res.redirect(`/chat/${req.params.uid}/${req.params.id}`)
+  })
+})
 app.get("/chat/:uid/:id",islogged,function(req,res){
    
 
- user.findById(req.user._id).populate("chats").exec(function(err,users){   
+ user.findById(req.user._id).populate("chats").populate("notis").exec(function(err,users){   
+  
+for(var j=0;j<users.notis.length;j++){
+
+	if(users.notis[j].uid==req.params.uid){
+
+		 noti.findByIdAndDelete(users.notis[j]._id,function(err,info){
+		 	
+		 })
+	}
+}
+   var flag=true
+   for (var i=0;i<users.chats.length;i++){
+
+   	 if(users.chats[i].from==req.user._id && users.chats[i].to==req.params.uid || users.chats[i].from==req.params.uid && users.chats[i].to==req.user._id){
+     
+        flag=false
+        break
+
+   	 }
+   }
+   if(flag==true){
+
+   	 var found="yes"
+   }
+   else if(flag==false){
+        var found="no"
+   }
  user.findOne({_id:req.params.uid}).populate("chats").exec(function(err,another){   
  
 
@@ -558,7 +681,7 @@ app.get("/chat/:uid/:id",islogged,function(req,res){
  // 	 var mark="no"
  // }
 
-   res.render("chat.ejs",{uid:req.params.uid,id:req.params.id,user:users,victim:another})
+   res.render("chat.ejs",{uid:req.params.uid,id:req.params.id,user:users,victim:another,found:found})
 })
 })
 })

@@ -264,9 +264,11 @@ flex-direction: column-reverse;
               
        
              <%})%>
+             
              <%}%>  
-	             
-	
+              <%if(found=="yes"){%>
+	           <div style="padding-top:50px;color:black" align="center">Let's chat</div>    
+	         <%}%>
 	</div>
 </div>
 	
@@ -374,14 +376,21 @@ socket.on("someOff",function(data){
 
 })
 
-  
+socket.on("textEvent",function(data){
+	
+socket.emit("textChecking",{id:"<%=currentUser._id%>",uid:"<%=victim._id%>"})
+	 	             
+
+	 	            
+
+})  
    $("#text").on('keyup',function(e){
        
     if(e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
      if($("#text").val().length>0){
                   $(".btns").removeClass("hid")
 
-                          socket.emit("typingOff",{userid:"<%=currentUser._id%>",one:"<%=currentUser.which%>",two:"<%=victim._id%>",three:"<%=victim.which%>",four:"<%=currentUser._id%>"})                  
+                          socket.emit("typingOff",{userid:"<%=currentUser._id%>",two:"<%=victim._id%>"})                  
                   
          
       }
@@ -408,6 +417,11 @@ socket.on("someOff",function(data){
   {
 	 	          	$(".ty").text(" ")
   }
+function notif(){
+
+	     	  socket.emit("noti",{id:"<%=currentUser._id%>",uid:"<%=victim._id%>"})
+
+}
   socket.on("tOff",function(data){
 	
    
@@ -453,7 +467,7 @@ $("#text").val("")
      	  socket.emit("message",{text:""})
 
   setTimeout(refresh,1000)
-
+   setTimeout(notif,2000)
 
 
   })  
