@@ -3,16 +3,15 @@
 
 
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+
+
+<script type="text/javascript" class="scri" src="https://code.jquery.com/jquery-3.2.1.min.js">
 </script>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-
 <style type="text/css">
 
 .image:hover{
@@ -194,10 +193,14 @@ body{
 
  <li class="nav-item">
          <i class="fas fa-bell nav-link" style="font-size:30px;color:white;cursor:pointer" type="button" data-toggle="modal" data-target="#exampleModals" data-whatever="@mdo"> <%if(currentUser){%>
+             <div id="freshtwo">
+
           <%if(usernoti.notis.length>0){%>
-              <span style="font-size:15px;border-radius:30px;color:red;"><b><%=usernoti.notis.length%></b></span>
+              <span style="font-size:15px;border-radius:30px;color:red;" class="news"><b><%=usernoti.notis.length%></b></span>
 <%}%>               
-        <%}%></i>
+        <%}%>
+      </div>
+        </i>
          
       
       </li>      
@@ -224,16 +227,18 @@ body{
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+     <div id="freshone">
+ 
       <div class="modal-body">
 <%if(currentUser){%>        
  <%if(usernoti.notis.length>0){%> 
  
+
  <table class="table">
   <thead>
    
   </thead>
   <tbody>
-
  <%usernoti.notis.forEach(function(pup){%>
      
     <tr style="">
@@ -269,14 +274,14 @@ body{
       
      <td><b style="font-size:14px;word-break:break-word"><%=pup.name%> Have a Message For You!</b></td></a>
 
-       <td><a href="/chatNoti/<%=pup.uid%>/<%=currentUser._id%>/<%=pup._id%>"><b style="color:black;font-size:10px"><i class="fab fa-rocketchat"></i></b></a></td>
+       <td><a href="/chatNoti/<%=pup.uid%>/<%=currentUser._id%>/<%=pup._id%>"><b style="color:black;padding-top:5px;font-size:20px"><i class="fab fa-rocketchat"></i></b></a></td>
  
         
 
       
 
        <td><b style="color:grey;font-size:10px"><%=pup.date.toLocaleString("en-UN")%></b></td>
-
+        <td><b style="color:red;font-size:14px"><%=pup.inc%></b></td>
     
 
     </tr>
@@ -286,7 +291,6 @@ body{
  
   </tbody>
  </table>
-
 <%}else{%>
 
         <div align="center"><b><em style="color:black;font-size:20px;">NO Notifications Yet!</em></b></div>
@@ -297,6 +301,9 @@ body{
         <div align="center"><b><em style="color:black;font-size:20px;">You Have Logged Out!</em></b></div>
 
 <%}%>
+
+
+      </div>
 
       </div>
       <div class="modal-footer">
@@ -405,8 +412,10 @@ body{
 <title>All-Profiles</title>
 <br>
 
+   <div id="freshon"> 
+
 <table class="table" style="padding-bottom:100px;color:white">
-    <div id="refreshs"> 
+
      <%user.forEach(function(data){%>
   <%if(data.username!==currentUser.username){%>
   <thead>
@@ -458,23 +467,25 @@ body{
       <td><%=data.last%></td>
       <td><%=data.username%></td>
       <td><a href="/chat/<%=data._id%>/<%=currentUser._id%>"><i class="fa-brands fa-rocketchat" style="color:white;font-size:30px"></i></a></td>
-      <%if(data.status=="online"){%>
+       <%if(data.status=="online"){%>
        
        <td><img src="https://miro.medium.com/max/512/1*nZ9VwHTLxAfNCuCjYAkajg.png" style="width:30px"></td>
-     <%}else{%>
+      <%}else{%>
        <td><img src="http://www.clker.com/cliparts/T/G/b/7/r/A/red-dot-md.png" style="width:30px"></td>
 
-     <%}%>
+      <%}%>
      </span>
+
     </tr>
   </tbody>
   <%}%>
     <%})%>  
-
     </tr>
   </tbody>
   </div>
 </table>
+</div>
+
 <%if(currentUser){%>
  <div style="padding-top:90px"> 
   <div style="position:fixed;bottom:0;" class="btn btn-block btn-success">
@@ -488,39 +499,58 @@ body{
 <script type="text/javascript">
 
 var socket = io();
+
 socket.on("online",function(data){
 	
 	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
 
 })
 socket.on("notification",function(data){
-	
-		 	             
-		 	             $("#new").load(" #new");
-		 	             $("#new").load(" #new");
+	console.log(data.val)
+  $("#freshone").load(" #freshone")
+  $("#freshtwo").load(" #freshtwo")
+
+  $("#freshone").load(" #freshone")
+  $("#freshtwo").load(" #freshtwo")
 
 
 })
+
 socket.on("newNotification",function(data){
-	
-		 	             
-		 	             $("#new").load(" #new");
-		 	             $("#new").load(" #new");
+   
+  		 socket.emit("newNoti",{id:""})
+
 
 })
 
-socket.on("someOff",function(data){
-	
-	 	             $("#refreshs").load(" #refreshs");
+socket.on("uptoDate",function(data){
+   
+$("#freshone").load(" #freshone")
+  $("#freshtwo").load(" #freshtwo")
 
-	 	             
+  $("#freshone").load(" #freshone")
+  $("#freshtwo").load(" #freshtwo")
+
 })
 
-socket.on("someOn",function(data){
+
+socket.on("someOffs",function(data){
 	
-	 	             $("#refreshs").load(" #refreshs");
 
 	 	             
+$("#freshon").load(" #freshon")
+$("#freshon").load(" #freshon")
+
+	 	            
+
+})
+
+socket.on("someOns",function(data){
+	
+
+	 	             
+$("#freshon").load(" #freshon")
+$("#freshon").load(" #freshon")
 
 	 	            
 
@@ -606,6 +636,6 @@ $(document).ready(function(){
 
 
 </script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>

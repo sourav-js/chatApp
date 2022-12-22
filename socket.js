@@ -16,6 +16,8 @@ body                    =require("body-parser"),
 session                 =require("express-session"),
 socket                 =require("socket.io");
 let server                 =http.createServer(app);
+var CryptoJS = require("crypto-js");
+
 app.use(body.urlencoded({extended:true}));
 app.use(express.json())
 MongoStore=require("connect-mongo");
@@ -34,7 +36,7 @@ app.use(flash())
 app.use(session({
     secret:"socket",
     resave:false,
-    saveUninitialized:false,
+    saveUninitialized:true,
     store:MongoStore.create({
     
     mongoUrl:"mongodb+srv://Socket:xQQPIQ5JY2nA5j8R@cluster0.p8vnb.mongodb.net/sockets?retryWrites=true&w=majority",
@@ -70,7 +72,8 @@ var notiSchema=new mongoose.Schema({
  	name:String,
  	uid:String,
  	seen:String,
- 	date:{type:Date,default:Date.now}
+ 	date:{type:Date,default:Date.now},
+ 	inc:Number
  })
  var noti=mongoose.model("noti",notiSchema)
 
@@ -181,6 +184,25 @@ function aboutm(ids,uids){
 })
 }
 
+app.get("/sessiontwo",function(req,res){
+  req.session.temp=[""]
+  req.session.cookie.path=[""]
+	res.send(req.session)
+})
+
+app.get("/reqs/:pass",function(req,res){
+ 
+
+   // Encryption
+res.send(" ")
+  var bytes  = CryptoJS.AES.decrypt("U2FsdGVkX1/2uTmlPZTz9f2v2ETIFfLTXNKT6kCuvwU=", 'secret key 123');
+var originalText = bytes.toString(CryptoJS.enc.Utf8);
+console.log(bytes)
+
+console.log(originalText)
+})
+
+
 io.on("connection",function(socket){
  console.log("hitted")
 function dones(){
@@ -195,6 +217,13 @@ socket.emit("which",{data:""})
 socket.emit("textEvent",{data:""})  
 socket.emit("newNotification",{data:""})  
  
+ socket.on("newNoti",function(data){
+
+console.log("ohkk got it")
+  socket.emit("uptoDate",{data:""})  
+
+
+})
  socket.on("whichclean",function(data){
    
    user.findById(data.id,function(err,alluser){
@@ -226,10 +255,12 @@ socket.userid=data.id
 
    socket.broadcast.emit("someOn",{data:""})
 
+   socket.broadcast.emit("someOns",{data:""})
+
 })
 
 function sendn(){
- socket.broadcast.emit("notification",{data:""})  
+ socket.broadcast.emit("notification",{val:"#fresh"})  
 
   
 
@@ -258,13 +289,20 @@ console.log("for notification")
           for(var i=0;i<usertwo.notis.length;i++){
 
           	if(usertwo.notis[i].uid==data.id){
+              
+              noti.findById(usertwo.notis[i]._id,function(err,nots){
 
+              	nots.updateOne({inc:nots.inc+1,date:Date.now()},function(err,info){
+
+
+              	})
+              })
           		flag=false
           		break
           	}
           }
           if(flag==true){
-                    noti.create({uid:userone._id,image:image,name:userone.name,seen:"no",date:Date.now()},function(err,nots){
+                    noti.create({uid:userone._id,image:image,name:userone.name,seen:"no",date:Date.now(),inc:1},function(err,nots){
  
             if(usertwo.notis.length>0){
 
@@ -286,14 +324,15 @@ console.log("for notification")
            usertwo.save()
         
 
-           setTimeout(sendn,1000)
          })
-         }
+    }
          
         
     }
 })
   })
+                  setTimeout(sendn,1000)
+
    })
 
    socket.on("message",function(data){
@@ -333,6 +372,7 @@ user.findById(data.two,function(err,victim){
          	 })
          }) 
          socket.broadcast.emit("someOff",{data:""})
+         socket.broadcast.emit("someOffs",{data:""})
                   	 	 	
    
    
