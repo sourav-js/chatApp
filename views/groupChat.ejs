@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head>
 	<meta charset="UTF-8">
-	<title><%=victim.name%></title>
+	<title><%=groups.name%></title>
 	
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
 <script type="text/javascript" class="scri" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
@@ -76,7 +76,6 @@
 }
 
 .chat-box {
-	background: url('../img/bg.jpeg');
 	background-attachment:all ;
 	padding-left: 20px;
 	overflow-y: auto;
@@ -211,47 +210,57 @@ flex-direction: column-reverse;
 			<div class="chat-header">
 				<div class="profile">
 					<div class="left">
-						<%if(victim.image && victim.image!==""){%>
-						 <img src="/<%=victim.image%>" class="pp">
+						<%if(groups.image && groups.image!==""){%>
+						 <img src="/<%=groups.image%>" class="pp">
 						<%}else{%>
 						 <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="pp">
 
 						<%}%>
-						<h2><a href="/profile/<%=victim._id%>/<%=currentUser._id%>/lllll" style="cursor:pointer;text-decoration:none;color:white "><%=victim.first%></a></h2>
-						<%if(victim.status=="online"){%>
-						 <span><img src="https://miro.medium.com/max/512/1*nZ9VwHTLxAfNCuCjYAkajg.png" style="width:10px"></span>
-						<%}else{%>
-             <span><img src="http://www.clker.com/cliparts/T/G/b/7/r/A/red-dot-md.png" style="width:10px"></span>
-						<%}%>
-										<%if(victim.which==currentUser._id){%>
-                     	
-					<span style="font-size:10px;transform:translateX(15px);" class="ty"></span>
-				 <%}%>
-
+						<h2><%=groups.name%></h2>
+						
+					    <span style="font-size:10px;transform:translateX(15px);" class="ty"></span>
+   					
+                   
 					</div>
 					<div class="right">
-						
+                        <a href="/Members/<%=groups._id%>"><i class="fas fa-users" style="color:white;font-size:20px"></i></a>
+                        <%if(admins==false){%> 
+ 
+                        <a href="/allMembers/<%=groups._id%>"><i class="fas fa-users-cog" style="color:white;font-size:20px"></i></a>
+                       <%}%> 
+                       <form action="/removeMember" method="POST" id="off" style="display:inline-block;">	
+                         <input type="hidden" name="uid" value="<%=currentUser._id%>">
+                         <input type="hidden" name="gid" value="<%=groups._id%>">
+                            <i class="fas fa-power-off ownOut"  style="color:red;font-size:20px"></i>
+                       </form>
+                        <a href="/adminMembers/<%=groups._id%>"><i class="fas fa-user-shield" style="color:white;font-size:20px"></i></a>
+
 					</div>
 				</div>
 			</div>
 			<div class="chat-box">
-            <%if(user && user.chats.length>0){%>
- <%user.chats.forEach(function(info){%> 
+            <%if(groups && groups.messages.length>0){%>
+ <%groups.messages.forEach(function(info){%> 
              <%if(info.from==currentUser._id && info.to==uid){%>
 
 				<div class="chat-r">
 					<div class="sp"></div>
 					<div class="mess mess-r">
+                           <b> <%=info.name%></b>
+                           <br>	
                             <%=info.text%>
 						</p>
 						<div class="check">
-							<span><%=info.date.toLocaleString([], { hour: '2-digit', minute: '2-digit' })%> <%if(info.seen=="no"){%><span><i class="fas fa-check-double" style="color:grey"></i></span><%}else{%><i class="fas fa-check-double" style="color:blue"></i><%}%>
+							<span><%=info.date.toLocaleString([], { hour: '2-digit', minute: '2-digit' })%> <a href="/messageSeen/<%=info._id%>"><i class="fas fa-angle-double-right" style="color:grey;font-size:15px"></i></a>
 						</div>
 					</div>
 				</div>
-			<%}else if(info.to==currentUser._id && info.from==uid){%>	
+			<%}else if(info.from!==currentUser._id && info.to==uid){%>	
+			  <%if(mark!==true){%>
 				<div class="chat-l">
 					<div class="mess">
+					                           <b><a href="/chat/<%=info.from%>/<%=currentUser._id%>" style="text-decoration:none;cursor:pointer" ><%=info.name%></a></b>
+
 						<p>
                             <%=info.text%>
 						</p>
@@ -261,26 +270,43 @@ flex-direction: column-reverse;
 					</div>
 					<div class="sp"></div>
 				</div>
+				<%}else if(mark==true){%>
+           <div class="chat-l">
+					<div class="mess">
+					                           <b>xxxx</b>
+
+						<p>
+                            xxxxxxx
+						</p>
+						<div class="check">
+							<span>xxxxx</span>
+						</div>
+					</div>
+					<div class="sp"></div>
+				</div>
+				<%}%>
              <%}%>
               
        
              <%})%>
              
              <%}%>  
-              <%if(found=="yes"){%>
-	           <div style="padding-top:50px;color:black" align="center">Let's chat</div>    
-	         <%}%>
+              
 	</div>
 </div>
 	
 		
 			<div class="chat-footer">
+			 <%if(mark==false){%>
 				<textarea placeholder="Type a message" id="text"></textarea>
+				
 				<div class="icons">
 					
 				</div>
             <span class="btns hid" id="oks"><button class="mic" style="border-radius:30px;border-style:none;cursor:pointer;background-color:green"><i class="fas fa-paper-plane" style="color:white;font-size:20px"></i></button></span>
-			
+			<%}else if(mark==true){%>
+           <h7><b>You Can't Reply , You are not a member anymore!</b></h7>
+			<%}%>
 			</div>
 </div>		
 	
@@ -303,10 +329,14 @@ socket.on("online",function(data){
 	 socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
 })
 
-socket.on("seen",function(data){
+
+ socket.on("grpseen",function(data){
 	
-	 socket.emit("seenMessage",{id:"<%=currentUser._id%>",uid:"<%=uid%>"})
-})
+		 
+	
+		 socket.emit("grpseenMessage",{id:"<%=currentUser._id%>",uid:"<%=uid%>",mark:<%=mark%>})
+
+ })
 socket.on("done",function(data){
 	             $("#refreshs").load(" #refreshs");
 	             
@@ -377,23 +407,16 @@ socket.on("someOff",function(data){
 
 })
 
-socket.on("textEvent",function(data){
-	
-socket.emit("textChecking",{id:"<%=currentUser._id%>",uid:"<%=victim._id%>"})
-	 	             
-
-	 	            
-
-})  
+ 
+  
    $("#text").on('keyup',function(e){
        
     if(e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
      if($("#text").val().length>0){
                   $(".btns").removeClass("hid")
 
-                          socket.emit("typingOff",{userid:"<%=currentUser._id%>",two:"<%=victim._id%>"})                  
-                  
-         
+                     socket.emit("grptypingOff",{username:"<%=currentUser.username%>",id:"<%=currentUser._id%>",grpid:"<%=groups._id%>"})                  
+
       }
       else{
 
@@ -407,38 +430,43 @@ socket.emit("textChecking",{id:"<%=currentUser._id%>",uid:"<%=victim._id%>"})
        
     if(e.key!=="Control" && e.key!=="ArrowRight" && e.key!=="ArrowLeft" && e.key!=="ArrowDown" && e.key!=="ArrowUp" && e.key!=="Spacebar"){ 
      if($("#text").val().length>0){
-
-         socket.emit("typingOn",{userid:"<%=currentUser._id%>",one:"<%=currentUser.which%>",two:"<%=victim._id%>",three:"<%=victim.which%>",four:"<%=currentUser._id%>"})                  
+           
+            socket.emit("grptypingOn",{username:"<%=currentUser.username%>",id:"<%=currentUser._id%>",grpid:"<%=groups._id%>"})                  
+                        
       }
       
      }
    })
+function typ(){
 
-  function typ()
-  {
-	 	          	$(".ty").text(" ")
-  }
-function notif(){
-
-	     	  socket.emit("noti",{id:"<%=currentUser._id%>",uid:"<%=victim._id%>"})
+	 	 	          	$(".ty").text(" ")
 
 }
-  socket.on("tOff",function(data){
-	
-   
-    setTimeout(typ,2000)
-	 	             
+ 
+function notif(){
 
-})
+	     	  socket.emit("grpnoti",{id:"<%=currentUser._id%>",uid:"<%=uid%>"})
 
-socket.on("tOn",function(data){
+}
+ 
+socket.on("<%=groups._id%>s",function(data){
 	
-   
     
-	 	          	$(".ty").text("typing...")
+	 	          	setTimeout(typ,2000)
      
 
 })
+
+socket.on("<%=groups._id%>",function(data){
+	
+    
+	 	          	$(".ty").text(data.name + " is typing...")
+     
+
+})
+  
+
+
   $("#oks").click(function(){
 
 
@@ -446,12 +474,12 @@ socket.on("tOn",function(data){
 
 
 $.ajax({
-        url: "/chatCreate",
+        url: "/groupchatCreate",
         method: 'POST',
        data:{
-        
+        mark:<%=marks%>,
         uid:"<%=uid%>",
-        id:"<%=id%>",
+        id:"<%=users._id%>",
         text:$("#text").val()
 
              }        
@@ -474,8 +502,10 @@ $("#text").val("")
   })  
 
 
-
-
+  $(".ownOut").click(function(){
+    
+     $("#off").submit()
+})
 </script>
 
 </body>

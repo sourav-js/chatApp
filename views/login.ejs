@@ -7,6 +7,8 @@
       <title>Login Or Sign Up!</title>
       <link rel="stylesheet" href="style.css">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js">
+</script>
    </head>
    <style type="text/css">
       @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -244,6 +246,8 @@ form .btn input[type="submit"]{
                      Not a member? <a href="">Signup now</a>
                   </div>
                </form>
+
+               
                <form action="/registering" class="signup" method="POST" enctype="multipart/form-data"> 
                   <div class="field">
                      <input type="text" placeholder="first name" name="first" required>
@@ -251,16 +255,14 @@ form .btn input[type="submit"]{
                    <div class="field">
                      <input type="text" placeholder="middle" name="middle" >
                   </div>
+                   
+                  
+                 
                    <div class="field">
                      <input type="text" placeholder="last name" name="last" required>
                   </div>
 
-               <div class="field">
-                     <input type="file"  name="files" required>
-                  </div>
-
-
-
+              
 
                   <div class="field">
                      <input type="email" placeholder="email" name="username" required>
@@ -294,6 +296,44 @@ form .btn input[type="submit"]{
            signupBtn.click();
            return false;
          });
+         var sourav=[]
+         
+
+      $("#test").on("click",function(){
+             if($("#test").attr("mark")==" ")
+            {
+  $.ajax({
+          url: "/registering",
+          method: 'POST',
+         data:{
+          
+          uid:"checked",
+         
+
+               }        
+
+      });
+             $("#test").attr("mark","full")
+                            }
+                            else{
+
+
+ $.ajax({
+          url: "/registering",
+          method: 'POST',
+         data:{
+          
+          uid:"notchecked",
+         
+
+               }        
+
+      });                                             $("#test").attr("mark"," ")
+
+                            }  
+         })
+      
+
       </script>
    </body>
 </html>
