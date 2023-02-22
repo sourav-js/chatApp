@@ -121,7 +121,10 @@
 
         <script type="text/javascript">
          var socket=io()
-        
+        socket.on("online",function(data){
+  
+   socket.emit("onlineStatus",{id:"<%=currentUser._id%>"})
+})
 
 </script>
 

@@ -1382,16 +1382,7 @@ app.get("/profile/:uid/:id/:gid",function(req,res){
      }
      if(flag==true){
           var items=[]
-           	        var a=[]
-                   var b=[] 
-	         for(var p=0;p<meuser.groups.length;p++){
-
-	         	 a.push(meuser.groups[p]._id)
-	         }
-             for(var q=0;q<users.groups.length;q++){
-
-             	 b.push(users.groups[q]._id)
-             }
+           	       
 
 	          for(var i=0;i<a.length;i++){
 
@@ -1721,7 +1712,6 @@ app.post("/groupchatCreate",islogged,function(req,res){
        
 
    	 	 message.create({text:req.body.text,from:req.body.id,to:req.body.uid,name:userones.name,date:Date.now()},function(err,texts){
-          message.findById(texts._id,function(err,allm){
              var i=totalGroup.messages.length-1
              totalGroup.messages.push(0)
              while (i!==-1){
@@ -1805,7 +1795,7 @@ app.post("/groupchatCreate",islogged,function(req,res){
    	 	 })
    	 })
    	 })
-   })  
+   
  
 
 
