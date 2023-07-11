@@ -1747,7 +1747,7 @@ app.post("/groupchatCreate",islogged,function(req,res){
                                            }
                                            else{
 
-                                           	 seen.findByIdAndDelete(see._id,function(err,info){
+                                          	 seen.findByIdAndDelete(see._id,function(err,info){
 
                                            	 })
                                            }
