@@ -1352,29 +1352,8 @@ app.get("/profile/:uid/:id/:gid",function(req,res){
            	        var items=[]
            	        var a=[]
                    var b=[] 
-	         for(var p=0;p<meuser.groups.length;p++){
-
-	         	 a.push(String(meuser.groups[p]._id))
-	         }
-             for(var q=0;q<users.groups.length;q++){
-
-             	 b.push(String(users.groups[q]._id))
-             }
-              console.log("here all id")
-              console.log(a)
-              console.log(b)
-	          for(var i=0;i<a.length;i++){
-
-	           group.findById(a[i],function(err,grps){
-	          	  for(var j=0;j<b.length;j++){
-	                  if(Number(a[i])==Number(b[j])){
-                         console.log("matched")
-	                  	   items.push(grps)
-	                  	   break
-	                  }
-	         } 
-	      })
-	       }        
+	        
+	                
 	                console.log(items)
            	        res.render("profile.ejs",{user:users,items:items,flag:false,group:grp._id})
            	        break
@@ -1386,18 +1365,7 @@ app.get("/profile/:uid/:id/:gid",function(req,res){
           var items=[]
            	       
 
-	          for(var i=0;i<a.length;i++){
-
-	           group.findById(a[i],function(err,grps){
-	          	  for(var j=0;j<b.length;j++){
-	                  if(b[j]==a[i]){
-                         console.log("matched")
-	                  	   items.push(grps)
-	                  	   break
-	                  }
-	         } 
-	      })
-	       }   
+	          
      	     res.render("profile.ejs",{user:users,items:items,flag:true,group:grp._id})
 
      }
@@ -1418,22 +1386,7 @@ user.findOne({_id:req.params.id}).populate("groups").exec(function(err,alluser){
 
           var items=[]
 
-           for(var i=0;i<alluser.groups.length;i++){
-            group.findById(alluser.groups[i]._id,function(err,grpp){
-           	  for(var j=0;j<users.groups.length;j++){
-                 
-                 if(users.groups[j]._id==grpp._id){
-
-                     items.push(grpp)
-                     break
-
-
-                 }
-
-           	  }
-  
-             })
-           }
+          
 
                	 res.render("profile.ejs",{user:users,flag:" ",items:items,group:" "})
 
@@ -1654,7 +1607,7 @@ app.post("/profile/:id",islogged,function(req,res){
 })
 app.post("/chatCreate",islogged,function(req,res){
    
-   usler.findById(req.body.id).populate("chats").exec(function(err,userones){
+   user.findById(req.body.id).populate("chats").exec(function(err,userones){
 
    	 user.findOne({_id:req.body.uid}).populate("chats").populate("notis").exec(function(err,usertwos){
      
