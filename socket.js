@@ -19,8 +19,8 @@ let server                 =http.createServer(app);
 var CryptoJS = require("crypto-js");
 
 app.use(body.urlencoded({extended:true}));
-app.use(express.json())
-MongoStore=require("connect-mongo");
+app.use(express.json());
+var MongoStore=require("connect-mongo");
 mongoose.connect("mongodb+srv://Socket:xQQPIQ5JY2nA5j8R@cluster0.p8vnb.mongodb.net/sockets?retryWrites=true&w=majority",function(err,info){
 
 }) 
@@ -664,7 +664,7 @@ app.get("/",islogged,function(req,res){
  user.findById(req.user._id).populate("notis").exec(function(err,usersnoti){
   if(req.query.find){
   
-		     	 user.find({first:{$regex:req.query.find,$options:"$i"}},function(err,users){
+		     	 user.find({first:{$regex:req.query.find,$options:"i"}},function(err,users){
 
 		     	 	  if(users.length>0){  
 		     	 	    res.render("alluser.ejs",{user:users,data:req.query.find,usernoti:usersnoti})
@@ -1042,6 +1042,8 @@ for(var i=0;i<req.session.people.length;i++){
 res.redirect("back")
  
 })
+
+
 app.post("/makeAdmin/:id/:gid",islogged,function(req,res){
   group.findById(req.body.gid).populate("users").populate("admins").exec(function(err,allg){
 if(err){
@@ -1652,7 +1654,7 @@ app.post("/profile/:id",islogged,function(req,res){
 })
 app.post("/chatCreate",islogged,function(req,res){
    
-   user.findById(req.body.id).populate("chats").exec(function(err,userones){
+   usler.findById(req.body.id).populate("chats").exec(function(err,userones){
 
    	 user.findOne({_id:req.body.uid}).populate("chats").populate("notis").exec(function(err,usertwos){
      
